@@ -83,6 +83,17 @@ function vm_init(callback){
       }
     }
     //------------------------------------
+    var load_js_link=function(link){
+		$.getScript(link,function(){
+			var nm=link.split('/').pop();
+			nm=nm.replace(/\./g,'-');
+			$vm[nm]=1;
+			if(nm=='loader-js'){
+				google.charts.load('current', {packages: ['corechart']});
+			}
+		});
+	}
+	//------------------------------------
     setTimeout(function (){	$.ajaxSetup({cache:true}); load_resources(resources); },10);
     //------------------------------------
     load_vmapi();
