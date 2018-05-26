@@ -127,6 +127,19 @@ function vm_init(callback){
         $('#vm_alert_information').modal('hide');
       }
       //------------------------------------
+      var load_system_modules=function(){
+          //-------------------------------------
+          $vm.module_list['_system_export_dialog_module']={table_id:'',url:'__COMPONENT__/dialog/export_dialog_module.html'};
+          $vm.load_module_v2('_system_export_dialog_module','hidden',{})
+          //-------------------------------------
+          $vm.module_list['_system_import_dialog_module']={table_id:'',url:'__COMPONENT__/dialog/import_dialog_module.html'};
+          $vm.load_module_v2('_system_import_dialog_module','hidden',{})
+          //-------------------------------------
+          $vm.module_list['uploading_file_dialog_module']={table_id:'',url:'__COMPONENT__/dialog/uploading_file_dialog_module.html'};
+          $vm.load_module_v2('uploading_file_dialog_module','hidden',{})
+          //-------------------------------------
+      }
+      load_system_modules();
     }
     load_vmapi();
 }
