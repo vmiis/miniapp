@@ -28,7 +28,7 @@ function vm_init(callback){
             var content=$('body').find('#D__ID').html();
             $('body').find('#D__ID').remove();
             $('body').prepend("<div id='content_container_0'></div>");
-            //$vm.load_module_from_content(content,$vm.root_layout_content_slot);
+            over_write_alert();
             callback();
         }})
     }
@@ -53,6 +53,7 @@ function vm_init(callback){
     //--------------------------------------------------------
     $vm.url=function(text){
         text=text.replace(/__HOST__\//g,$vm.hosting_path+'/');
+        text=text.replace(/__PARTS__\//g,'https://vmiis.github.io/component/');
         text=text.replace(/__COMPONENT__\//g,'https://vmiis.github.io/component/');
         return text;
     }
@@ -84,18 +85,48 @@ function vm_init(callback){
     }
     //------------------------------------
     var load_js_link=function(link){
-		$.getScript(link,function(){
-			var nm=link.split('/').pop();
-			nm=nm.replace(/\./g,'-');
-			$vm[nm]=1;
-			if(nm=='loader-js'){
-				google.charts.load('current', {packages: ['corechart']});
-			}
-		});
-	}
-	//------------------------------------
+      $.getScript(link,function(){
+        var nm=link.split('/').pop();
+        nm=nm.replace(/\./g,'-');
+        $vm[nm]=1;
+        if(nm=='loader-js'){
+          google.charts.load('current', {packages: ['corechart']});
+        }
+      });
+    }
+    //------------------------------------
     setTimeout(function (){	$.ajaxSetup({cache:true}); load_resources(resources); },10);
     //------------------------------------
+    var over_write_alert=function(){
+      $('body').append("\
+        <div alert class='modal fade' id='vm_alert_information' tabindex='-1' role='dialog' aria-labelledby='vm_dialog' aria-hidden='true' data-backdrop='static'>\
+        <div class='modal-dialog' role='document'>\
+          <div class='modal-content'>\
+              <div class='modal-header'>\
+                  <h5 class='modal-title' id='ModalLabel'>Information</h5>\
+                  <button type='button' class='close' data-dismiss='modal' aria-label='Close'>\
+                      <span aria-hidden='true'>&times;</span>\
+                  </button>\
+              </div>\
+              <div class='modal-body'>\
+              </div>\
+              <div class='modal-footer'>\
+                  <button type='button' class='btn btn-secondary' data-dismiss='modal'>Close</button>\
+              </div>\
+          </div>\
+        </div>\
+        </div>\
+        "
+      );
+      //over write vm alert
+      $vm.alert=function(msg){
+        $('#vm_alert_information div.modal-body').html( $('<div/>').html(msg).text() );
+        $("#vm_alert_information").modal();
+      }
+      $vm.close_alert=function(){
+        $('#vm_alert_information').modal('hide');
+      }
+      //------------------------------------
+    }
     load_vmapi();
 }
-//------------------------------------
